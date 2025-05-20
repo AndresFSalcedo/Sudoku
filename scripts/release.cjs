@@ -66,6 +66,10 @@ rl.question('Which release is this? (patch / minor / major): ', async (type) => 
     run(`git push --tags`);
     console.log(`\n✅ Release v${version} complete and pushed!`);
 
+    // Step 7: Deploy to GitHub Pages using gh-pages
+    run(`npx gh-pages -d dist --message "Deploy v${version}"`);
+    console.log(`🚀 Deployed v${version} to GitHub Pages`);
+
   } catch (err) {
     console.error('\n❌ Release failed:', err.message);
   } finally {
