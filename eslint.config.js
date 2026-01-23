@@ -23,6 +23,10 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      // Enforce single quotes instead of double quotes
+      'quotes': ['error', 'single'],
+      // You might also use the TypeScript-specific rule for better integration
+      '@typescript-eslint/quotes': ["error", "single"]
     },
   },
 )

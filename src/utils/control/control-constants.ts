@@ -1,7 +1,16 @@
 // Imports.
 import type { IInputMode } from "@models/sudoku-grid-models";
 
-export const modes: IInputMode[] = ["setup", "solve", "pencil"];
+export interface IMode {
+    inputType: IInputMode;
+    shortCut: string;
+}
+
+export const modes: IMode[] = [
+    { inputType: "setup", shortCut: 'Alt + 1'},
+    { inputType: "solve", shortCut: 'Alt + 2'},
+    { inputType: "pencil", shortCut: 'Alt + 3'}
+];
 
 export const getProgressColor = (count: number, problem: boolean): string => {
     if (problem || count > 9) return "bg-red-500";

@@ -40,11 +40,12 @@ const InputModeComponent: React.FC = () => {
             <h2 className={header2ClassName}>Input Mode</h2>
             <div className="flex gap-2">
                 {modes.map(mode => (
-                    <Button key={mode}
-                            variant={inputMode === mode ? "primary":"default"}
-                            disabled={inputMode === mode}
-                            onClick={() => onInpurModeChange(mode)} >
-                        {capitalizeAndTrim(mode)}
+                    <Button key={mode.inputType}
+                            variant={inputMode === mode.inputType ? "primary":"default"}
+                            title={`Select: ${mode.shortCut}`}
+                            disabled={inputMode === mode.inputType}
+                            onClick={() => onInpurModeChange(mode.inputType)} >
+                        {capitalizeAndTrim(mode.inputType)}
                     </Button>
                 ))}
             </div>

@@ -14,6 +14,15 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
     const box = useSudokuStore(s => s.gridData.find(record => record.boxId === boxId));
     const inputMode = useSudokuStore(s => s.inputMode);
     const isSelected = useSudokuStore(s => s.selectedBoxes.has(boxId));
+    const valueSelection = useSudokuStore(s => {
+        // Only want this feature when there is only one box selected.
+        if(s.selectedBoxes.size !== 1) return "";
+        // Get the only box id on the set.
+        const [selectedBoxId] = s.selectedBoxes;
+        // Find the value of the selected box.
+        return s.gridData.find(record => record.boxId === selectedBoxId)?.value ?? "";
+
+    });
     // Store Actions.
     const onBoxSelectionChanged = useSudokuStore(s => s.selectBox);
 
@@ -32,7 +41,7 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
     }
 
     return (
-        <div className={`${getBoxBorderStyle(row, column, isSelected)} ${backgroundColor}`}
+        <div className={`${getBoxBorderStyle(row, column, isSelected, Boolean(valueSelection !== "" && valueSelection === value))} ${backgroundColor}`}
             onClick={boxSelectionEventHandler}>
                 <input id={`input-id-${boxId}`}
                             type="text"
