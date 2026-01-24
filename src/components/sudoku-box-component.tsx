@@ -14,13 +14,13 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
     const box = useSudokuStore(s => s.gridData.find(record => record.boxId === boxId));
     const inputMode = useSudokuStore(s => s.inputMode);
     const isSelected = useSudokuStore(s => s.selectedBoxes.has(boxId));
-    const valueSelection = useSudokuStore(s => {
+    const singleSelectedBox = useSudokuStore(s => {
         // Only want this feature when there is only one box selected.
-        if(s.selectedBoxes.size !== 1) return '';
+        if(s.selectedBoxes.size !== 1) return undefined;
         // Get the only box id on the set.
         const [selectedBoxId] = s.selectedBoxes;
         // Find the value of the selected box.
-        return s.gridData.find(record => record.boxId === selectedBoxId)?.value ?? '';
+        return s.gridData.find(record => record.boxId === selectedBoxId);
 
     });
     // Store Actions.
@@ -29,6 +29,14 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
     if(!box) return null;
     
     const { value, row, column, isFixedValue, backgroundColor, notes } = box;
+
+    const sameValue = typeof singleSelectedBox === 'object'
+        && typeof singleSelectedBox.value === 'number'
+        && typeof value === 'number'
+        && singleSelectedBox.value === value;
+    
+    const sameRow = typeof singleSelectedBox === 'object' && singleSelectedBox.row === row;
+    const sameColumn = typeof singleSelectedBox === 'object' && singleSelectedBox.column === column;
 
     /**
      * Event handler when the user clicks on the box.
@@ -41,13 +49,13 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
     }
 
     return (
-        <div className={`${getBoxBorderStyle(row, column, isSelected, Boolean(valueSelection !== '' && valueSelection === value))} ${backgroundColor}`}
+        <div className={`${backgroundColor} ${getBoxBorderStyle(row, column, isSelected)}`}
             onClick={boxSelectionEventHandler}>
                 <input id={`input-id-${boxId}`}
                             type="text"
                             inputMode="numeric"
                             value={value}
-                            className={getBoxInputClassName(isFixedValue)}
+                            className={getBoxInputClassName(backgroundColor, isFixedValue, sameRow, sameColumn, sameValue)}
                             readOnly
                             autoComplete="off"
                 />

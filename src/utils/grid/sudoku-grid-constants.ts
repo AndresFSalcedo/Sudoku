@@ -37,4 +37,4 @@ export const INITIAL_DIGIT_COUNTS: Record<number, IDigitCount> = {
 
 export const ARROW_KEYBOARD_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
-export const AVAILABLE_BOX_COLORS: IBackgroundColor[] = ['bg-amber-200', 'bg-lime-200', 'bg-rose-200', 'bg-sky-200', 'bg-slate-300', 'bg-cyan-200', 'bg-violet-200', 'bg-white']; 
+export const AVAILABLE_BOX_COLORS: IBackgroundColor[] = ['bg-white', 'bg-sky-200', 'bg-lime-200', 'bg-amber-200']; 
