@@ -1,9 +1,9 @@
 // Imports.
-import type React from "react";
-import { AVAILABLE_BOX_COLORS } from "@utils/grid/sudoku-grid-constants";
-import { useSudokuStore } from "@store/sudoku-store";
+import type React from 'react';
+import { AVAILABLE_BOX_COLORS } from '@utils/grid/sudoku-grid-constants';
+import { useSudokuStore } from '@store/sudoku-store';
 import Button from '@components/button-component';
-import { header2ClassName } from "@styles/constants";
+import { header2ClassName } from '@styles/constants';
 
 const BackgroundColorComponent: React.FC = () => {
 

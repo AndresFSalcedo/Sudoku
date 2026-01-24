@@ -1,13 +1,13 @@
 // Imports.
-import Button                   from "@components/button-component";
-import type React               from "react";
-import ConfirmDialog            from "@components/confirmation-dialogue-component";
-import useBooleanHook           from "@hooks/useBooleanHook";
-import { modes }                from "@utils/control/control-constants";
-import { useSudokuStore }       from "@store/sudoku-store";
-import type { IInputMode }      from "@models/sudoku-grid-models";
-import { header2ClassName }     from "@styles/constants";
-import { capitalizeAndTrim }    from "@utils/control/control-helper";
+import Button                   from '@components/button-component';
+import type React               from 'react';
+import ConfirmDialog            from '@components/confirmation-dialogue-component';
+import useBooleanHook           from '@hooks/useBooleanHook';
+import { modes }                from '@utils/control/control-constants';
+import { useSudokuStore }       from '@store/sudoku-store';
+import type { IInputMode }      from '@models/sudoku-grid-models';
+import { header2ClassName }     from '@styles/constants';
+import { capitalizeAndTrim }    from '@utils/control/control-helper';
 
 const InputModeComponent: React.FC = () => {
 
@@ -22,7 +22,7 @@ const InputModeComponent: React.FC = () => {
 
     // Event Handlers.
     const onInpurModeChange = (newMode: IInputMode) => {
-        if(newMode === "setup") {
+        if(newMode === 'setup') {
             setShowConfirm();
         } else {
             setInputMode(newMode);
@@ -41,7 +41,7 @@ const InputModeComponent: React.FC = () => {
             <div className="flex gap-2">
                 {modes.map(mode => (
                     <Button key={mode.inputType}
-                            variant={inputMode === mode.inputType ? "primary":"default"}
+                            variant={inputMode === mode.inputType ? 'primary':'default'}
                             title={`Select: ${mode.shortCut}`}
                             disabled={inputMode === mode.inputType}
                             onClick={() => onInpurModeChange(mode.inputType)} >

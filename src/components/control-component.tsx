@@ -1,10 +1,10 @@
 // Imports.
-import Button                   from "@components/button-component";
-import type React               from "react";
-import ProgressComponent        from "./progress-component";
-import InputModeComponent       from "./input-mode-component";
-import BackgroundColorComponent from "./background-color-component";
-import { useSudokuStore }       from "@store/sudoku-store";
+import Button                   from '@components/button-component';
+import type React               from 'react';
+import ProgressComponent        from './progress-component';
+import InputModeComponent       from './input-mode-component';
+import BackgroundColorComponent from './background-color-component';
+import { useSudokuStore }       from '@store/sudoku-store';
 
 const Control: React.FC = () => {
 

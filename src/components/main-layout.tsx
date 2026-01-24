@@ -1,10 +1,10 @@
 // Imports.
-import type React   from "react";
-import Control      from "@components/control-component";
-import SudokuGrid   from "@components/sudoku-grid";
-import { useSudokuStore } from "@store/sudoku-store";
-import { CLEAR_CELL_KEY } from "@models/sudoku-box-models";
-import { ARROW_KEYBOARD_KEYS } from "@utils/grid/sudoku-grid-constants";
+import type React   from 'react';
+import Control      from '@components/control-component';
+import SudokuGrid   from '@components/sudoku-grid';
+import { useSudokuStore } from '@store/sudoku-store';
+import { CLEAR_CELL_KEY } from '@models/sudoku-box-models';
+import { ARROW_KEYBOARD_KEYS } from '@utils/grid/sudoku-grid-constants';
 
 
 const MainLayout: React.FC = () => {
@@ -45,11 +45,11 @@ const MainLayout: React.FC = () => {
             onMoveSelection(direction);
         } else {
             switch(inputMode) {
-                case "solve":
-                case "setup": {
+                case 'solve':
+                case 'setup': {
                     // Clear box.
                     if(CLEAR_CELL_KEY.includes(key)) {
-                        onSetBoxValue("");
+                        onSetBoxValue('');
                     }
                     
                     if(/^[1-9]$/.test(e.key)) {
@@ -57,7 +57,7 @@ const MainLayout: React.FC = () => {
                     }
                     break;
                 }
-                case "pencil":
+                case 'pencil':
                     if(/^[1-9]$/.test(e.key)) {
                         onSetBoxNote(parseInt(e.key));
                     }

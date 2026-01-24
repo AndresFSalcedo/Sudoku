@@ -1,7 +1,7 @@
 // Imports.
-import React from "react";
+import React from 'react';
 import Button from './button-component';
-import { header2ClassName } from "@styles/constants";
+import { header2ClassName } from '@styles/constants';
 
 interface ConfirmDialogProps {
     title: string;

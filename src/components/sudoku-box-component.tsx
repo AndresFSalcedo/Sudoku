@@ -1,9 +1,9 @@
 // Imports.
-import type React               from "react";
-import { useSudokuStore }       from "@store/sudoku-store";
+import type React               from 'react';
+import { useSudokuStore }       from '@store/sudoku-store';
 import { getBoxBorderStyle,
          getBoxInputClassName, 
-         NUMPAD_ORDER} from "@utils/box/sudoku-box-helper";
+         NUMPAD_ORDER} from '@utils/box/sudoku-box-helper';
 
 interface ISudokuBoxProps {
     boxId: string;
@@ -16,11 +16,11 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
     const isSelected = useSudokuStore(s => s.selectedBoxes.has(boxId));
     const valueSelection = useSudokuStore(s => {
         // Only want this feature when there is only one box selected.
-        if(s.selectedBoxes.size !== 1) return "";
+        if(s.selectedBoxes.size !== 1) return '';
         // Get the only box id on the set.
         const [selectedBoxId] = s.selectedBoxes;
         // Find the value of the selected box.
-        return s.gridData.find(record => record.boxId === selectedBoxId)?.value ?? "";
+        return s.gridData.find(record => record.boxId === selectedBoxId)?.value ?? '';
 
     });
     // Store Actions.
@@ -36,12 +36,12 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
      * 
      */
     const boxSelectionEventHandler = (e: React.MouseEvent) => {
-        if(inputMode === 'pencil' && value !== "") return;
+        if(inputMode === 'pencil' && value !== '') return;
         onBoxSelectionChanged(boxId, e.ctrlKey);
     }
 
     return (
-        <div className={`${getBoxBorderStyle(row, column, isSelected, Boolean(valueSelection !== "" && valueSelection === value))} ${backgroundColor}`}
+        <div className={`${getBoxBorderStyle(row, column, isSelected, Boolean(valueSelection !== '' && valueSelection === value))} ${backgroundColor}`}
             onClick={boxSelectionEventHandler}>
                 <input id={`input-id-${boxId}`}
                             type="text"
@@ -56,7 +56,7 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
                         { NUMPAD_ORDER.map(num => {
                             return (
                                 <div key={num} className="flex items-center justify-center">
-                                    {notes.includes(num) ? num : ""}
+                                    {notes.includes(num) ? num : ''}
                                 </div>
                             );
                         })}

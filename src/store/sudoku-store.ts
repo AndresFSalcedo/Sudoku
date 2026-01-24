@@ -21,7 +21,7 @@ interface ISudokuState {
     setInputMode: ( mode: IInputMode) => void;
     setBoxNoteForSelectedBoxes: (value: number) => void;
     selectBox: (boxId: string, ctrlKey: boolean) => void;
-    setBoxValueForSelectedBoxes: (value: number | "") => void;
+    setBoxValueForSelectedBoxes: (value: number | '') => void;
     moveSelection: (direction: 'up' | 'down' | 'left' | 'right') => void;
     setBackgroundColorForSelectedBoxes: (color: IBackgroundColor) => void;
 }
@@ -44,7 +44,7 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
         digitCounts: INITIAL_DIGIT_COUNTS
     })),
 
-    clearBackgroundColors: () => set((state) => ({ gridData: state.gridData.map((box) => ({...box, backgroundColor: "bg-white"}))})),
+    clearBackgroundColors: () => set((state) => ({ gridData: state.gridData.map((box) => ({...box, backgroundColor: 'bg-white'}))})),
 
     setInputMode: (newMode) => {
         set(state => {
@@ -127,7 +127,7 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
             });
 
             // If a value was set, find affected boxes and remove notes
-            if (value !== "") {
+            if (value !== '') {
                 // Get all affected (newly updated) boxes
                 const updatedBoxes = state.gridData.filter(
                     (box) => state.selectedBoxes.has(box.boxId) && !box.isFixedValue
@@ -140,7 +140,7 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
                         const b = updatedGrid[i];
 
                         // Skip self or already filled boxes
-                        if (state.selectedBoxes.has(b.boxId) || b.value !== "") continue;
+                        if (state.selectedBoxes.has(b.boxId) || b.value !== '') continue;
 
                         const isInSameScope = b.row === row || b.column === column || b.boxGroup === boxGroup;
 
@@ -206,7 +206,7 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
     setBoxNoteForSelectedBoxes: (newNote) => {
         set(state => ({
             gridData: state.gridData.map(box => {
-                if (!state.selectedBoxes.has(box.boxId) || box.value !== "" || box.isFixedValue) {
+                if (!state.selectedBoxes.has(box.boxId) || box.value !== '' || box.isFixedValue) {
                     return box;
                 }
                 const hasNote = box.notes.includes(newNote);

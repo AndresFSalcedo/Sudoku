@@ -1,7 +1,7 @@
 // Imports.
-import type React         from "react";
-import SudokuBox          from "@components/sudoku-box-component";
-import { useSudokuStore } from "@store/sudoku-store";
+import type React         from 'react';
+import SudokuBox          from '@components/sudoku-box-component';
+import { useSudokuStore } from '@store/sudoku-store';
 
 const SudokuGrid: React.FC = () => {
     

@@ -1,7 +1,7 @@
 // Imports.
-import type { ISudokuBox } from "@models/sudoku-box-models";
+import type { ISudokuBox } from '@models/sudoku-box-models';
 import type { IDigitCount,
-              IBackgroundColor } from "@models/sudoku-grid-models";
+              IBackgroundColor } from '@models/sudoku-grid-models';
 
 export const INITIAL_SUDOKU_GRID: ISudokuBox[] = Array.from({ length: 9 }, (_, rowIndex) =>
   Array.from({ length: 9 }, (_, colIndex) => {
@@ -13,11 +13,11 @@ export const INITIAL_SUDOKU_GRID: ISudokuBox[] = Array.from({ length: 9 }, (_, r
       row,
       column,
       boxGroup,
-      value: "",
+      value: '',
       notes: [],
       isFixedValue: false,
       boxId: `${row}-${column}`,
-      backgroundColor: "bg-white",
+      backgroundColor: 'bg-white',
     }
     return box;
   })
@@ -37,4 +37,4 @@ export const INITIAL_DIGIT_COUNTS: Record<number, IDigitCount> = {
 
 export const ARROW_KEYBOARD_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
-export const AVAILABLE_BOX_COLORS: IBackgroundColor[] = ["bg-amber-200", "bg-lime-200", "bg-rose-200", "bg-sky-200", "bg-slate-300", "bg-cyan-200", "bg-violet-200", "bg-white"]; 
+export const AVAILABLE_BOX_COLORS: IBackgroundColor[] = ['bg-amber-200', 'bg-lime-200', 'bg-rose-200', 'bg-sky-200', 'bg-slate-300', 'bg-cyan-200', 'bg-violet-200', 'bg-white']; 
