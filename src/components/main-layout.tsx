@@ -5,6 +5,8 @@ import SudokuGrid   from '@components/sudoku-grid';
 import { useSudokuStore } from '@store/sudoku-store';
 import { CLEAR_CELL_KEY } from '@models/sudoku-box-models';
 import { ARROW_KEYBOARD_KEYS } from '@utils/grid/sudoku-grid-constants';
+import useBooleanHook from '@hooks/useBooleanHook';
+import ConfirmDialog from './confirmation-dialogue-component';
 
 
 const MainLayout: React.FC = () => {
@@ -16,12 +18,16 @@ const MainLayout: React.FC = () => {
     const onSetBoxValue = useSudokuStore(s => s.setBoxValueForSelectedBoxes);
     const onMoveSelection = useSudokuStore(s => s.moveSelection);
 
+    // State.
+    const [showConfirm, setShowConfirm] = useBooleanHook();
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.preventDefault();
         if (e.altKey) {
             switch (e.key) {
             case '1':
-                setInputMode('setup');
+                //setInputMode('setup'); Now ask for confirmation.
+                setShowConfirm();
                 return;
             case '2':
                 setInputMode('solve');
@@ -66,6 +72,12 @@ const MainLayout: React.FC = () => {
         }
     }
 
+    const confirmResetToSetup = () => {
+        // Set back to setup mode.
+        setInputMode('setup');
+        setShowConfirm();
+    }
+
     return(
         <div id="main-layout"
             className="outline-none min-h-screen bg-gradient-to-br from-gray-100 to-white p-8"
@@ -88,6 +100,12 @@ const MainLayout: React.FC = () => {
                     <SudokuGrid />
                 </div>
             </div>
+            { showConfirm && 
+                <ConfirmDialog title="Switch to Setup Mode?"
+                                message="This will clear all current values and pencil marks. Are you sure you want to reset the board?"
+                                onConfirm={confirmResetToSetup} 
+                                onCancel={() => { setShowConfirm(false); }} />
+            }
         </div>
     );
 }
