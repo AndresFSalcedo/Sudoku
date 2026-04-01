@@ -1,12 +1,18 @@
 // Imports.
-import type React   from 'react';
-import Control      from '@components/control-component';
-import SudokuGrid   from '@components/sudoku-grid';
-import { useSudokuStore } from '@store/sudoku-store';
-import { CLEAR_CELL_KEY } from '@models/sudoku-box-models';
-import { ARROW_KEYBOARD_KEYS } from '@utils/grid/sudoku-grid-constants';
-import useBooleanHook from '@hooks/useBooleanHook';
-import ConfirmDialog from './confirmation-dialogue-component';
+import type React               from 'react';
+import Control                  from '@components/control-component';
+import SudokuGrid               from '@components/sudoku-grid';
+import { useSudokuStore }       from '@store/sudoku-store';
+import { CLEAR_CELL_KEY }       from '@models/sudoku-box-models';
+import { ARROW_KEYBOARD_KEYS }  from '@utils/grid/sudoku-grid-constants';
+import useBooleanHook           from '@hooks/useBooleanHook';
+import ConfirmDialog            from './confirmation-dialogue-component';
+import PuzzleSelectorComponent  from './puzzle-selector-component';
+import InputModeComponent       from './input-mode-component';
+import BackgroundColorComponent from './background-color-component';
+import ProgressComponent        from './progress-component';
+import ClearGridComponent       from './clear-grid-component';
+import NumpadComponent          from './numpad-component';
 
 
 const MainLayout: React.FC = () => {
@@ -20,6 +26,7 @@ const MainLayout: React.FC = () => {
 
     // State.
     const [showConfirm, setShowConfirm] = useBooleanHook();
+    const [showExtras, setShowExtras]   = useBooleanHook();
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -80,24 +87,61 @@ const MainLayout: React.FC = () => {
 
     return(
         <div id="main-layout"
-            className="outline-none min-h-screen bg-gradient-to-br from-gray-100 to-white p-8"
+            className="outline-none min-h-screen bg-gradient-to-br from-gray-100 to-white p-4 sm:p-8"
             onKeyDown={handleKeyDown}
             tabIndex={0}>
             {/* Title */}
-            <h1 className="text-4xl font-semibold text-black text-center mb-10 font-[Poppins]">
+            <h1 className="text-3xl sm:text-4xl font-semibold text-black text-center mb-6 sm:mb-10 font-[Poppins]">
                 Sudoku Solver
             </h1>
 
             {/* Main content layout */}
-            <div className="flex justify-center gap-10">
-                {/* Left: Control Panel */}
-                <div className="w-[300px]">
+            <div className="flex flex-col items-center lg:flex-row lg:items-start justify-center gap-6 lg:gap-10">
+
+                {/* DESKTOP: full left control panel */}
+                <div className="hidden lg:block w-[300px]">
                     <Control />
                 </div>
 
-                {/* Right: Grid */}
-                <div>
+                <div className="flex flex-col items-center gap-6 w-full lg:w-auto">
+
+                    {/* MOBILE ONLY: essentials above the grid */}
+                    <div className="lg:hidden w-full bg-white shadow rounded-md p-4">
+                        <div className="flex flex-col gap-6">
+                            <PuzzleSelectorComponent />
+                            <InputModeComponent />
+                        </div>
+                    </div>
+
+                    {/* Grid */}
                     <SudokuGrid />
+
+                    {/* MOBILE ONLY: numpad */}
+                    <div className="lg:hidden w-full">
+                        <NumpadComponent />
+                    </div>
+
+                    {/* MOBILE ONLY: extras toggle + panel */}
+                    <div className="lg:hidden w-full flex flex-col gap-2">
+                        <button
+                            onClick={() => setShowExtras()}
+                            className="w-full bg-white shadow rounded-md px-4 py-3 flex items-center justify-between text-sm font-semibold text-gray-700">
+                            <span>Settings</span>
+                            <span className={`transition-transform duration-200 ${showExtras ? 'rotate-180' : ''}`}>▼</span>
+                        </button>
+                        {showExtras && (
+                            <div className="w-full bg-white shadow rounded-md p-4">
+                                <div className="flex flex-col gap-6">
+                                    <BackgroundColorComponent />
+                                    <ProgressComponent />
+                                    <div className="flex items-center justify-center">
+                                        <ClearGridComponent />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
                 </div>
             </div>
             { showConfirm && 

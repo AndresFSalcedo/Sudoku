@@ -9,7 +9,7 @@ const SudokuGrid: React.FC = () => {
     const grid = useSudokuStore(s => s.gridData);
 
     return (
-        <div className="grid grid-cols-9 grid-rows-9 w-[600px] h-[600px] bg-white border-4 border-gray-800 shadow-lg outline-none focus:ring-1 ring-blue-300">
+        <div className="grid grid-cols-9 grid-rows-9 w-[min(600px,calc(100vw-2rem))] h-[min(600px,calc(100vw-2rem))] bg-white border-4 border-gray-800 shadow-lg outline-none focus:ring-1 ring-blue-300">
             {grid.map((box) => {
                 return (
                     <SudokuBox key={box.boxId} boxId={box.boxId} />

@@ -1,6 +1,7 @@
 // Imports.
 import { create }                   from 'zustand';
 import type { ISudokuBox }          from '@models/sudoku-box-models';
+import type { ISudokuPuzzle }      from '@models/sudoku-puzzle-models';
 import { INITIAL_SUDOKU_GRID,
          INITIAL_DIGIT_COUNTS }     from '@utils/grid/sudoku-grid-constants';
 import type { IInputMode,
@@ -14,6 +15,7 @@ interface ISudokuState {
     selectedBoxes: Set<string>;
     lastSelectedBox: string | undefined;
     digitCounts: Record<number, IDigitCount>;
+    selectedPuzzleId: string;
     // Actions.
     clearGridData: () => void;
     computeCompletionMap: () => void;
@@ -24,6 +26,7 @@ interface ISudokuState {
     setBoxValueForSelectedBoxes: (value: number | '') => void;
     moveSelection: (direction: 'up' | 'down' | 'left' | 'right') => void;
     setBackgroundColorForSelectedBoxes: (color: IBackgroundColor) => void;
+    loadPuzzle: (puzzle: ISudokuPuzzle) => void;
 }
 
 // Store.
@@ -34,6 +37,7 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
     lastSelectedBox: undefined,
     inputMode: 'setup',
     digitCounts: INITIAL_DIGIT_COUNTS,
+    selectedPuzzleId: '',
 
     // Actions.
     clearGridData: () => set(() => ({
@@ -41,7 +45,8 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
         selectedBoxes: new Set(),
         lastSelectedBox: undefined,
         inputMode: 'setup',
-        digitCounts: INITIAL_DIGIT_COUNTS
+        digitCounts: INITIAL_DIGIT_COUNTS,
+        selectedPuzzleId: '',
     })),
 
     clearBackgroundColors: () => set((state) => ({ gridData: state.gridData.map((box) => ({...box, backgroundColor: 'bg-white'}))})),
@@ -214,6 +219,22 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
                 return  newBox;
             })
         }))
+    },
+
+    loadPuzzle: (puzzle) => {
+        const freshGrid = INITIAL_SUDOKU_GRID.map(box => {
+            const clue = puzzle.clues.find(c => c.boxId === box.boxId);
+            return clue ? { ...box, value: clue.value, isFixedValue: true } : { ...box };
+        });
+        set({
+            gridData: freshGrid,
+            selectedBoxes: new Set(),
+            lastSelectedBox: undefined,
+            inputMode: 'solve',
+            digitCounts: INITIAL_DIGIT_COUNTS,
+            selectedPuzzleId: puzzle.id,
+        });
+        get().computeCompletionMap();
     },
 
     setBackgroundColorForSelectedBoxes: (color) => {

@@ -15,7 +15,8 @@
       "@models/*": ["models/*"],
       "@hooks/*": ["hooks/*"],
       "@store/*": ["store/*"],
-      "@styles/*": ["styles/*"]
+      "@styles/*": ["styles/*"],
+      "@data/*": ["data/*"]
     },
     "target": "ESNext",
     "module": "ESNext",

@@ -19,7 +19,7 @@ export const getBoxBorderStyle = (row: number, column: number, isSelected: boole
     const borderClasses = [(isSelected ? 'border-3 border-blue-700' : 'border border-gray-300'),
       (isBoldBottom && !(isSelected) ? 'border-b-2 border-b-black' : ''),
       (isBoldRight && !(isSelected) ? 'border-r-2 border-r-black' : ''),
-      'relative flex items-center justify-center text-lg'
+      'relative flex items-center justify-center'
     ].join(' ');
     return borderClasses;
 }
@@ -33,7 +33,7 @@ export const getBoxInputClassName = (
 ): string => {
 
   return [
-    'w-full h-full text-center text-4xl outline-none caret-transparent absolute inset-0',
+    'w-full h-full text-center text-[4vw] sm:text-4xl outline-none caret-transparent absolute inset-0',
     (isFixedValue ? 'text-black' : 'text-blue-400'),
     ((sameRow || sameColumn || isSecondarySelected) && backgroundColor === 'bg-white' ? 'bg-blue-100' : '')
   ]

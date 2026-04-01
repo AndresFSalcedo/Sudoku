@@ -60,7 +60,7 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
                             autoComplete="off"
                 />
                 {notes.length > 0 &&
-                    <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 text-[10px] p-[2px] text-gray-600 font-medium select-none">
+                    <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 text-[1.2vw] sm:text-[10px] p-[2px] text-gray-600 font-medium select-none">
                         { NUMPAD_ORDER.map(num => {
                             return (
                                 <div key={num} className="flex items-center justify-center">
