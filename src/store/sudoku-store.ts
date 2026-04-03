@@ -16,8 +16,11 @@ interface ISudokuState {
     lastSelectedBox: string | undefined;
     digitCounts: Record<number, IDigitCount>;
     selectedPuzzleId: string;
+    isComplete: boolean;
+    startedAt: number | null;
     // Actions.
     clearGridData: () => void;
+    dismissCompletion: () => void;
     computeCompletionMap: () => void;
     clearBackgroundColors: () => void;
     setInputMode: ( mode: IInputMode) => void;
@@ -38,6 +41,8 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
     inputMode: 'setup',
     digitCounts: INITIAL_DIGIT_COUNTS,
     selectedPuzzleId: '',
+    isComplete: false,
+    startedAt: null,
 
     // Actions.
     clearGridData: () => set(() => ({
@@ -47,7 +52,11 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
         inputMode: 'setup',
         digitCounts: INITIAL_DIGIT_COUNTS,
         selectedPuzzleId: '',
+        isComplete: false,
+        startedAt: null,
     })),
+
+    dismissCompletion: () => set({ isComplete: false }),
 
     clearBackgroundColors: () => set((state) => ({ gridData: state.gridData.map((box) => ({...box, backgroundColor: 'bg-white'}))})),
 
@@ -56,13 +65,16 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
             const updates: Partial<ISudokuState> = {
                 inputMode: newMode
             };
-            // Change from 'setup' to another.
+            // Change from 'setup' to another: lock clues and start the timer.
             if(state.inputMode === 'setup' && (newMode === 'solve' || newMode === 'pencil')) {
-                updates.gridData = state.gridData.map(box => box.value !== '' ? { ...box, isFixedValue: true} : box)
+                updates.gridData = state.gridData.map(box => box.value !== '' ? { ...box, isFixedValue: true} : box);
+                updates.startedAt = Date.now();
             }
-            // Change from another to 'setup': Clear all the values and notes, set the fixed back to editable.
+            // Change from another to 'setup': clear values/notes and reset timer.
             if((state.inputMode === 'solve' || state.inputMode === 'pencil') && newMode === 'setup') {
-                updates.gridData = state.gridData.map(box => box.isFixedValue ? { ...box, isFixedValue: false} : {...box, value: '', notes: []})
+                updates.gridData = state.gridData.map(box => box.isFixedValue ? { ...box, isFixedValue: false} : {...box, value: '', notes: []});
+                updates.startedAt = null;
+                updates.isComplete = false;
             }
             return updates;
         })
@@ -205,7 +217,12 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
                 counts[digit].problem = true;
             }
         }
-        set({ digitCounts: counts });
+        const alreadyComplete = get().isComplete;
+        const isComplete = !alreadyComplete
+            && get().inputMode !== 'setup'
+            && Object.values(counts).every(d => d.count === 9 && !d.problem);
+
+        set({ digitCounts: counts, ...(isComplete ? { isComplete: true } : {}) });
     },
 
     setBoxNoteForSelectedBoxes: (newNote) => {
@@ -233,6 +250,8 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
             inputMode: 'solve',
             digitCounts: INITIAL_DIGIT_COUNTS,
             selectedPuzzleId: puzzle.id,
+            isComplete: false,
+            startedAt: Date.now(),
         });
         get().computeCompletionMap();
     },

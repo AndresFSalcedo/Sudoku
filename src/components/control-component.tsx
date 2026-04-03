@@ -5,12 +5,14 @@ import InputModeComponent       from './input-mode-component';
 import PuzzleSelectorComponent  from './puzzle-selector-component';
 import BackgroundColorComponent from './background-color-component';
 import ClearGridComponent       from './clear-grid-component';
+import TimerComponent           from './timer-component';
 
 const Control: React.FC = () => {
     return(
         <div className="bg-white shadow rounded-md p-4 w-full lg:max-w-[300px]">
             <div className="flex flex-col gap-6">
                 <PuzzleSelectorComponent />
+                <TimerComponent />
                 <InputModeComponent />
                 <BackgroundColorComponent />
                 <ProgressComponent />

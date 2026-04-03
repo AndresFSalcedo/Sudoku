@@ -10,7 +10,9 @@ import ConfirmDialog            from './confirmation-dialogue-component';
 import PuzzleSelectorComponent  from './puzzle-selector-component';
 import BackgroundColorComponent from './background-color-component';
 import ProgressComponent        from './progress-component';
-import ClearGridComponent       from './clear-grid-component';
+import ClearGridComponent           from './clear-grid-component';
+import CompletionModalComponent     from './completion-modal-component';
+import TimerComponent               from './timer-component';
 import NumpadComponent          from './numpad-component';
 
 
@@ -105,8 +107,11 @@ const MainLayout: React.FC = () => {
                 <div className="flex flex-col items-center gap-2 lg:gap-6 w-full lg:w-auto">
 
                     {/* MOBILE ONLY: essentials above the grid */}
-                    <div className="lg:hidden w-full bg-white shadow rounded-md p-2">
-                        <PuzzleSelectorComponent />
+                    <div className="lg:hidden w-full bg-white shadow rounded-md p-2 flex items-center gap-2">
+                        <div className="flex-1">
+                            <PuzzleSelectorComponent />
+                        </div>
+                        <TimerComponent />
                     </div>
 
                     {/* Grid */}
@@ -140,7 +145,8 @@ const MainLayout: React.FC = () => {
 
                 </div>
             </div>
-            { showConfirm && 
+            <CompletionModalComponent />
+            { showConfirm &&
                 <ConfirmDialog title="Switch to Setup Mode?"
                                 message="This will clear all current values and pencil marks. Are you sure you want to reset the board?"
                                 onConfirm={confirmResetToSetup} 
