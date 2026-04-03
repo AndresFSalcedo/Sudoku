@@ -58,6 +58,8 @@ const SudokuBox: React.FC<ISudokuBoxProps> = ({ boxId }) => {
                             className={getBoxInputClassName(backgroundColor, isFixedValue, sameRow, sameColumn, sameValue)}
                             readOnly
                             autoComplete="off"
+                            tabIndex={-1}
+                            onMouseDown={e => e.preventDefault()}
                 />
                 {notes.length > 0 &&
                     <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 text-[1.2vw] sm:text-[10px] p-[2px] text-gray-600 font-medium select-none">
