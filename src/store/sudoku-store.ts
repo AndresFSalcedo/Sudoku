@@ -16,11 +16,14 @@ interface ISudokuState {
     lastSelectedBox: string | undefined;
     digitCounts: Record<number, IDigitCount>;
     selectedPuzzleId: string;
-    isComplete: boolean;
     startedAt: number | null;
+    completedAt: number | null;
+    isPaused: boolean;
+    pausedAt: number | null;
     // Actions.
     clearGridData: () => void;
     dismissCompletion: () => void;
+    togglePause: () => void;
     computeCompletionMap: () => void;
     clearBackgroundColors: () => void;
     setInputMode: ( mode: IInputMode) => void;
@@ -41,8 +44,10 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
     inputMode: 'setup',
     digitCounts: INITIAL_DIGIT_COUNTS,
     selectedPuzzleId: '',
-    isComplete: false,
     startedAt: null,
+    completedAt: null,
+    isPaused: false,
+    pausedAt: null,
 
     // Actions.
     clearGridData: () => set(() => ({
@@ -52,11 +57,24 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
         inputMode: 'setup',
         digitCounts: INITIAL_DIGIT_COUNTS,
         selectedPuzzleId: '',
-        isComplete: false,
         startedAt: null,
+        completedAt: null,
+        isPaused: false,
+        pausedAt: null,
     })),
 
-    dismissCompletion: () => set({ isComplete: false }),
+    dismissCompletion: () => set({ completedAt: null }),
+
+    togglePause: () => {
+        const { isPaused, pausedAt, startedAt } = get();
+        if (!startedAt) return;
+        if (isPaused && pausedAt) {
+            // Resuming: shift startedAt forward by the paused duration so elapsed stays correct.
+            set({ isPaused: false, pausedAt: null, startedAt: startedAt + (Date.now() - pausedAt) });
+        } else {
+            set({ isPaused: true, pausedAt: Date.now() });
+        }
+    },
 
     clearBackgroundColors: () => set((state) => ({ gridData: state.gridData.map((box) => ({...box, backgroundColor: 'bg-white'}))})),
 
@@ -74,7 +92,9 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
             if((state.inputMode === 'solve' || state.inputMode === 'pencil') && newMode === 'setup') {
                 updates.gridData = state.gridData.map(box => box.isFixedValue ? { ...box, isFixedValue: false} : {...box, value: '', notes: []});
                 updates.startedAt = null;
-                updates.isComplete = false;
+                updates.completedAt = null;
+                updates.isPaused = false;
+                updates.pausedAt = null;
             }
             return updates;
         })
@@ -217,12 +237,12 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
                 counts[digit].problem = true;
             }
         }
-        const alreadyComplete = get().isComplete;
-        const isComplete = !alreadyComplete
-            && get().inputMode !== 'setup'
+        const { completedAt: alreadyCompleted, inputMode } = get();
+        const justCompleted = !alreadyCompleted
+            && inputMode !== 'setup'
             && Object.values(counts).every(d => d.count === 9 && !d.problem);
 
-        set({ digitCounts: counts, ...(isComplete ? { isComplete: true } : {}) });
+        set({ digitCounts: counts, ...(justCompleted ? { completedAt: Date.now() } : {}) });
     },
 
     setBoxNoteForSelectedBoxes: (newNote) => {
@@ -250,8 +270,10 @@ export const useSudokuStore = create<ISudokuState>((set, get) => ({
             inputMode: 'solve',
             digitCounts: INITIAL_DIGIT_COUNTS,
             selectedPuzzleId: puzzle.id,
-            isComplete: false,
             startedAt: Date.now(),
+            completedAt: null,
+            isPaused: false,
+            pausedAt: null,
         });
         get().computeCompletionMap();
     },

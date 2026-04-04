@@ -18,7 +18,8 @@ import NumpadComponent          from './numpad-component';
 
 const MainLayout: React.FC = () => {
 
-    const inputMode = useSudokuStore(s => s.inputMode);
+    const inputMode  = useSudokuStore(s => s.inputMode);
+    const isPaused   = useSudokuStore(s => s.isPaused);
     // Store Actions.
     const setInputMode = useSudokuStore(s => s.setInputMode);
     const onSetBoxNote = useSudokuStore(s => s.setBoxNoteForSelectedBoxes);
@@ -107,15 +108,24 @@ const MainLayout: React.FC = () => {
                 <div className="flex flex-col items-center gap-2 lg:gap-6 w-full lg:w-auto">
 
                     {/* MOBILE ONLY: essentials above the grid */}
-                    <div className="lg:hidden w-full bg-white shadow rounded-md p-2 flex items-center gap-2">
-                        <div className="flex-1">
-                            <PuzzleSelectorComponent />
-                        </div>
-                        <TimerComponent />
+                    <div className="lg:hidden w-full bg-white shadow rounded-md p-2">
+                        <PuzzleSelectorComponent />
                     </div>
 
-                    {/* Grid */}
-                    <SudokuGrid />
+                    {/* Grid + timer */}
+                    <div className="flex flex-col items-end gap-1">
+                        <TimerComponent />
+                        <div className="relative">
+                            <div className={isPaused ? 'blur-sm pointer-events-none select-none' : ''}>
+                                <SudokuGrid />
+                            </div>
+                            {isPaused && (
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    <span className="text-white font-bold text-2xl tracking-widest drop-shadow-lg">PAUSED</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
                     {/* MOBILE ONLY: numpad */}
                     <div className="lg:hidden w-full">

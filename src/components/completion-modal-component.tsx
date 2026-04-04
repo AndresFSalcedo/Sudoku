@@ -2,27 +2,19 @@
 import type React         from 'react';
 import Button             from '@components/button-component';
 import { useSudokuStore } from '@store/sudoku-store';
-
-const formatDuration = (ms: number): string => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes      = Math.floor(totalSeconds / 60);
-    const seconds      = totalSeconds % 60;
-    return minutes > 0
-        ? `${minutes}m ${seconds.toString().padStart(2, '0')}s`
-        : `${seconds}s`;
-};
+import { formatDuration } from '@utils/time-helper';
 
 const CompletionModalComponent: React.FC = () => {
 
-    const isComplete      = useSudokuStore(s => s.isComplete);
-    const startedAt       = useSudokuStore(s => s.startedAt);
+    const completedAt      = useSudokuStore(s => s.completedAt);
+    const startedAt        = useSudokuStore(s => s.startedAt);
     const selectedPuzzleId = useSudokuStore(s => s.selectedPuzzleId);
-    const dismiss         = useSudokuStore(s => s.dismissCompletion);
-    const clearGrid       = useSudokuStore(s => s.clearGridData);
+    const dismiss          = useSudokuStore(s => s.dismissCompletion);
+    const clearGrid        = useSudokuStore(s => s.clearGridData);
 
-    if (!isComplete) return null;
+    if (!completedAt) return null;
 
-    const duration = startedAt ? formatDuration(Date.now() - startedAt) : null;
+    const duration = startedAt ? formatDuration(completedAt - startedAt) : null;
 
     return (
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
@@ -35,7 +27,6 @@ const CompletionModalComponent: React.FC = () => {
                         <span className="font-bold text-green-600 text-lg">{duration}</span>
                     </p>
                 )}
-                {/* Leaderboard placeholder — will be populated once backend is ready */}
                 <div className="w-full bg-gray-50 rounded-lg p-4 text-sm text-gray-400 italic">
                     Leaderboard coming soon
                 </div>
