@@ -1,16 +1,19 @@
 // Imports.
 import React,
-{ useState }                    from 'react';
+{ useState, useEffect }         from 'react';
 import Button                   from '@components/button-component';
-import puzzles                  from '@data/sudoku-puzzles.json';
 import ConfirmDialog            from '@components/confirmation-dialogue-component';
 import { useSudokuStore }       from '@store/sudoku-store';
 import { header2ClassName }     from '@styles/constants';
 import type { ISudokuPuzzle }   from '@models/sudoku-puzzle-models';
 
-const typedPuzzles = puzzles as ISudokuPuzzle[];
-
 const PuzzleSelectorComponent: React.FC = () => {
+
+    const [puzzles, setPuzzles] = useState<ISudokuPuzzle[]>([]);
+
+    useEffect(() => {
+        import('@data/sudoku-puzzles.json').then(m => setPuzzles(m.default as ISudokuPuzzle[]));
+    }, []);
 
     // Store.
     const loadPuzzle       = useSudokuStore(s => s.loadPuzzle);
@@ -31,7 +34,7 @@ const PuzzleSelectorComponent: React.FC = () => {
     };
 
     const applyLoad = () => {
-        const puzzle = typedPuzzles.find(p => p.id === selectedId);
+        const puzzle = puzzles.find(p => p.id === selectedId);
         if (puzzle) {
             loadPuzzle(puzzle);
         }
@@ -47,7 +50,7 @@ const PuzzleSelectorComponent: React.FC = () => {
                     onChange={e => setSelectedId(e.target.value)}
                     className="flex-1 text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
                     <option value="" disabled>Select a puzzle...</option>
-                    {typedPuzzles.map(p => (
+                    {puzzles.map(p => (
                         <option key={p.id} value={p.id}>{p.name}</option>
                     ))}
                 </select>
