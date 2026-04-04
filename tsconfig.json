@@ -7,16 +7,15 @@
   "compilerOptions": {
     "types": ["node"],
     "moduleResolution": "bundler",
-    "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@utils/*": ["utils/*"],
-      "@assets/*": ["assets/*"],
-      "@models/*": ["models/*"],
-      "@hooks/*": ["hooks/*"],
-      "@store/*": ["store/*"],
-      "@styles/*": ["styles/*"],
-      "@data/*": ["data/*"]
+      "@components/*": ["./src/components/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@models/*": ["./src/models/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@store/*": ["./src/store/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@data/*": ["./src/data/*"]
     },
     "target": "ESNext",
     "module": "ESNext",
