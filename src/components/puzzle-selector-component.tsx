@@ -1,8 +1,9 @@
 // Imports.
 import React,
-{ useState, useEffect }         from 'react';
+{ useState, useEffect, useMemo }         from 'react';
 import Button                   from '@components/button-component';
 import ConfirmDialog            from '@components/confirmation-dialogue-component';
+import DropdownComponent        from '@components/dropdown-component';
 import { useSudokuStore }       from '@store/sudoku-store';
 import { header2ClassName }     from '@styles/constants';
 import type { ISudokuPuzzle }   from '@models/sudoku-puzzle-models';
@@ -10,6 +11,7 @@ import type { ISudokuPuzzle }   from '@models/sudoku-puzzle-models';
 const PuzzleSelectorComponent: React.FC = () => {
 
     const [puzzles, setPuzzles] = useState<ISudokuPuzzle[]>([]);
+    const puzzleOptions = useMemo(() => puzzles.map(p => ({ id: p.id, label: p.name })), [puzzles]); 
 
     useEffect(() => {
         import('@data/sudoku-puzzles.json').then(m => setPuzzles(m.default as ISudokuPuzzle[]));
@@ -45,15 +47,13 @@ const PuzzleSelectorComponent: React.FC = () => {
         <>
             <h2 className={header2ClassName}>Puzzle</h2>
             <div className="flex gap-2">
-                <select
-                    value={selectedId}
-                    onChange={e => setSelectedId(e.target.value)}
-                    className="flex-1 text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
-                    <option value="" disabled>Select a puzzle...</option>
-                    {puzzles.map(p => (
-                        <option key={p.id} value={p.id}>{p.name}</option>
-                    ))}
-                </select>
+                <div className="flex-1">
+                    <DropdownComponent
+                        options={puzzleOptions}
+                        selectedId={selectedId}
+                        placeholder="Select a puzzle..."
+                        onChange={setSelectedId} />
+                </div>
                 <Button variant="primary" disabled={!selectedId} onClick={onLoad}>Load</Button>
             </div>
             {showConfirm && (
